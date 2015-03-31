@@ -1,0 +1,21 @@
+name:                  snooze-test
+version:               0.0.1
+cabal-version:         >= 1.8
+build-type:            Simple
+
+library
+  build-depends:
+                       base
+                     , exception
+                     , p
+                     , QuickCheck
+                     , quickcheck-instances
+                     , random
+                     , scotty
+                     , snooze
+                     , text
+                     , wai
+
+  exposed-modules:
+                       Snooze.Arbitrary
+                       Snooze.Server
