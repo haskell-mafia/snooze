@@ -1,0 +1,17 @@
+#!/bin/sh -exu
+
+export LC_COLLATE=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+if [ ! -e $HOME/.cabal/packages/hackage.haskell.org/00-index.cache ] ||
+     find $HOME/.cabal/packages/hackage.haskell.org/00-index.cache -type f -mtime +1 | grep -q 00-index; then
+    cabal update
+fi
+
+make test
+make build
+
+VERSION=$(date '+%Y%m%d%H%M%S')-$(git log --pretty=format:%h -n 1)
+
+cabal haddock --hoogle
+aws s3 --region=ap-southeast-2 cp --recursive dist/doc/html/snooze/ s3://ambiata-doc/snooze-haddock/$VERSION

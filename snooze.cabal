@@ -1,0 +1,75 @@
+name:                  snooze
+version:               0.0.1
+license:               AllRightsReserved
+author:                Ambiata <info@amiata.com>
+maintainer:            Ambiata <info@ambiata.com>
+copyright:             (c) 2015 Ambiata
+synopsis:              snooze
+category:              Web
+cabal-version:         >= 1.8
+build-type:            Simple
+description:           snooze.
+
+library
+  build-depends:
+                       aeson                           == 0.8.*
+                     , base                            >= 3          && < 5
+                     , blaze-builder                   == 0.3.*
+                     , bytestring                      == 0.10.*
+                     , containers                      == 0.5.*
+                     , http-client                     == 0.4.*
+                     , http-types                      == 0.8.*
+                     , lens                            == 4.6.*
+                     , p
+                     , text                            == 1.1.*
+                     , template-haskell
+                     , transformers                    == 0.4.*
+                     , wreq                            == 0.3.*
+
+  ghc-options:         -Wall -O2
+
+  hs-source-dirs:
+                       src
+
+  exposed-modules:
+                       Paths_snooze
+                       Snooze
+
+                       Snooze.Control
+                       Snooze.Core
+                       Snooze.Json
+                       Snooze.Url
+
+
+test-suite test
+  type:                exitcode-stdio-1.0
+  main-is:             test.hs
+  ghc-options:         -Wall -threaded -O2
+  hs-source-dirs:      test
+  build-depends:       base
+                     , orphanarium-core
+                     , p
+                     , snooze
+                     , QuickCheck                      == 2.7.*
+                     , quickcheck-instances            == 0.3.*
+                     , text
+
+test-suite test-io
+  type:                exitcode-stdio-1.0
+  main-is:             test-io.hs
+  ghc-options:         -Wall -threaded -O2
+  hs-source-dirs:      test
+  build-depends:       aeson
+                     , base
+                     , containers
+                     , http-types
+                     , aeson
+                     , orphanarium-core
+                     , p
+                     , scotty                          == 0.8.*
+                     , QuickCheck                      == 2.7.*
+                     , quickcheck-instances            == 0.3.*
+                     , random
+                     , snooze
+                     , text
+                     , wai
