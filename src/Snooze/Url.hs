@@ -4,7 +4,7 @@
 {-# LANGUAGE PackageImports #-}
 module Snooze.Url (
     Path(pathToString)
-  , Url(urlToString)
+  , Url(urlToRequest)
   , url
   , path
   , pathRaw
@@ -16,15 +16,15 @@ import           Data.ByteString.Lazy.Char8 as BSL
 import           Data.String (String)
 import           Data.Text as T
 
+import           Network.HTTP.Client (Request, parseUrl)
 import           Network.HTTP.Types.URI (encodePathSegmentsRelative)
 
 import           P
 
 
--- The representation with 'String' here is only because of "Network.Wreq", the intended consumer.
 newtype Url = Url {
-    urlToString :: String
-  } deriving (Eq, Show)
+    urlToRequest :: Request
+  } deriving (Show)
 
 -- | Represents _just_ the relative path of a URL.
 --
@@ -34,9 +34,9 @@ newtype Path = Path {
   } deriving (Eq, Show)
 
 -- | Construct a 'Url' from a base URL and a valid 'Path'.
-url :: Text -> Path -> Url
+url :: Text -> Path -> Maybe Url
 url b (Path p) =
-  Url $ T.unpack (stripTrailingSlash b) <> "/" <> p
+  fmap Url . parseUrl $ T.unpack (stripTrailingSlash b) <> "/" <> p
   where
     stripTrailingSlash = T.dropWhileEnd (== '/')
 
