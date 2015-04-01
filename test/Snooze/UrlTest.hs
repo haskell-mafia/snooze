@@ -31,10 +31,6 @@ prop_path_raw :: Path -> Property
 prop_path_raw p =
   pathRaw (T.pack . pathToString $ p) === p
 
-prop_url :: Text -> Path -> Property
-prop_url b p =
-  urlToString (url b p) === T.unpack (T.dropWhileEnd (== '/') b) <> "/" <> pathToString p
-
 
 return []
 tests :: IO Bool

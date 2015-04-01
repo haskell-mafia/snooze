@@ -1,39 +1,22 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Snooze.Json (
-    SnoozeIO
-  , Snooze.Json.get
-  , Snooze.Json.post
+    decodeResponse
+  , headerJson
   ) where
-
-import           Control.Exception as E
-import           Control.Lens
 
 import           Data.Aeson
 import           Data.ByteString.Lazy as BSL
 import           Data.Text as T
 
-import           Network.Wreq as R
+import           Network.HTTP.Client
+import           Network.HTTP.Types.Header
 
 import           P
 
-import           Snooze.Control
-import           Snooze.Url
 
+decodeResponse :: FromJSON a => Response BSL.ByteString -> Either Text a
+decodeResponse = either (Left . T.pack) Right . eitherDecode . responseBody
 
-get :: (FromJSON a) => Url -> SnoozeIO (Either Text a)
-get url' =
-  (decodeResponse =<< (R.getWith (defaults & headerJson) $ urlToString url'))
-    `E.catch` statusHandler
-
-post :: (ToJSON a, FromJSON b) => Url -> a -> SnoozeIO (Either Text b)
-post url' a =
-  (decodeResponse =<< (R.postWith (defaults & headerJson) (urlToString url') . toJSON $ a))
-    `E.catch` statusHandler
-
-
-decodeResponse :: FromJSON a => Response BSL.ByteString -> SnoozeIO (Either Text a)
-decodeResponse r = pure . Right . over _Left T.pack . eitherDecode $ r ^. responseBody
-
-headerJson :: Options -> Options
-headerJson = header "Accept" .~ ["application/json; charset=utf-8"]
+headerJson :: Header
+headerJson = ("Accept", "application/json; charset=utf-8")

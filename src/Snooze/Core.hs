@@ -1,19 +1,48 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 module Snooze.Core (
-    Snooze.Core.delete
+    get
+  , post
+  , delete
   ) where
 
-import           Control.Exception as E
+import           Data.ByteString.Lazy as BSL
 
-import           Network.Wreq as R
+import           Network.HTTP.Client
+import           Network.HTTP.Types
 
 import           P
 
-import           Snooze.Control
 import           Snooze.Url
 
+import           System.IO
 
-delete :: Url -> SnoozeIO ()
-delete url' =
-  (fmap Right . void . R.delete $ urlToString url')
-    `E.catch` statusHandler
+
+get :: Url -> RequestHeaders -> IO (Response BSL.ByteString)
+get url' headers =
+  httpGo $ (urlToRequest url') {
+    requestHeaders = headers
+  , method = methodGet
+  }
+
+post :: Url -> RequestHeaders -> BSL.ByteString -> IO (Response BSL.ByteString)
+post url' headers body' =
+  httpGo $ (urlToRequest url') {
+    requestHeaders = headers
+  , requestBody = RequestBodyLBS body'
+  , method = methodPost
+  }
+
+delete :: Url -> RequestHeaders -> IO (Response BSL.ByteString)
+delete url' headers =
+  httpGo $ (urlToRequest url') {
+    requestHeaders = headers
+  , method = methodDelete
+  }
+
+-- Eventually we will want/need to have sensible retries/timeouts here
+httpGo :: Request -> IO (Response BSL.ByteString)
+httpGo req =
+  withManager defaultManagerSettings $ httpLbs req { checkStatus = checkStatusIgnore }
+    where
+      -- A stupid default of http-client is to throw exceptions for non-200
+      checkStatusIgnore _ _ _ = Nothing
