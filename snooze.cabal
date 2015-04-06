@@ -14,7 +14,7 @@ library
   build-depends:
                        aeson                           == 0.8.*
                      , base                            >= 3          && < 5
-                     , blaze-builder                   == 0.3.*
+                     , blaze-builder                   >= 0.3        && <= 0.5
                      , bytestring                      == 0.10.*
                      , containers                      == 0.5.*
                      , http-client                     == 0.4.*
