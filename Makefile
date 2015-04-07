@@ -12,7 +12,8 @@ SUBMODULES = \
 
 default: repl
 
-${SUBMODULES}:
+
+${SUBMODULES}: .gitmodules
 	git submodule init
 	git submodule update
 
