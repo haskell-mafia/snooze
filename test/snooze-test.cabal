@@ -6,7 +6,7 @@ build-type:            Simple
 library
   build-depends:
                        base
-                     , exception
+                     , exceptions
                      , p
                      , QuickCheck
                      , quickcheck-instances
