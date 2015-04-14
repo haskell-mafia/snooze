@@ -3,6 +3,7 @@ module Snooze.Core (
     get
   , post
   , delete
+  , httpGo
   ) where
 
 import           Data.ByteString.Lazy as BSL
