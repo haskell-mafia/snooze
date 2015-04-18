@@ -35,6 +35,7 @@ library
 
                        Snooze.Core
                        Snooze.Json
+                       Snooze.Text
                        Snooze.Url
 
 
