@@ -2,24 +2,24 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Snooze.JsonTest where
+module Test.Snooze.Json where
 
 import           Data.String (String)
 import           Data.Text as T
 
 import           P
 
-import           Snooze.Arbitrary ()
 import           Snooze.Core as C
-import           Snooze.CoreTest
 import           Snooze.Json
-import           Snooze.Server
 import           Snooze.Url
 
 import           System.IO
 
 import           Web.Scotty as S
 
+import           Test.Snooze.Arbitrary ()
+import           Test.Snooze.Core
+import           Test.Snooze.Server
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.QuickCheck.Monadic

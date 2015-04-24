@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Snooze.CoreTest where
+module Test.Snooze.Core where
 
 import           Data.ByteString.Lazy as BSL
 import           Data.Text as T
@@ -12,15 +12,15 @@ import           Network.HTTP.Types.Status
 
 import           P
 
-import           Snooze.Arbitrary ()
 import           Snooze.Core as C
-import           Snooze.Server
 import           Snooze.Url
 
 import           System.IO
 
 import           Web.Scotty as S
 
+import           Test.Snooze.Arbitrary ()
+import           Test.Snooze.Server
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.QuickCheck.Monadic

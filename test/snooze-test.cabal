@@ -17,5 +17,5 @@ library
                      , wai
 
   exposed-modules:
-                       Snooze.Arbitrary
-                       Snooze.Server
+                       Test.Snooze.Arbitrary
+                       Test.Snooze.Server

@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
-module Snooze.Arbitrary where
+module Test.Snooze.Arbitrary where
 
 import           P
 

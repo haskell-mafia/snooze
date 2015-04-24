@@ -3,11 +3,11 @@ module Main where
 
 import           Orphanarium.Core.Main
 
-import           Snooze.UrlTest
+import qualified Test.Snooze.Url
 
 import           System.IO (IO)
 
 main :: IO ()
 main = orphanariumMain
-    [ Snooze.UrlTest.tests
+    [ Test.Snooze.Url.tests
     ]

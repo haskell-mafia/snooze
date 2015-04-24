@@ -1,7 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Snooze.UrlTest where
+module Test.Snooze.Url where
 
 import           Data.List as L
 import           Data.Text as T
@@ -10,11 +10,11 @@ import           Orphanarium.Core
 
 import           P
 
-import           Snooze.Arbitrary ()
 import           Snooze.Url
 
 import           System.IO
 
+import           Test.Snooze.Arbitrary ()
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
