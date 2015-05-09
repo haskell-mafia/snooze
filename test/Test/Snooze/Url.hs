@@ -6,7 +6,7 @@ module Test.Snooze.Url where
 import           Data.List as L
 import           Data.Text as T
 
-import           Orphanarium.Core
+import           Disorder.Core
 
 import           P
 
