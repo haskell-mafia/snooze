@@ -1,15 +1,6 @@
 #!/bin/sh -exu
 
-git submodule sync
-git submodule init
-git submodule update
-
-export LC_COLLATE=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-./cabal update
-./cabal build
-./cabal test --log=/dev/stdout
+$(dirname $0)/ci.branches
 
 VERSION=$(date '+%Y%m%d%H%M%S')-$(git log --pretty=format:%h -n 1)
 
