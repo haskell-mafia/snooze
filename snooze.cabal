@@ -45,7 +45,7 @@ test-suite test
   ghc-options:         -Wall -threaded -O2
   hs-source-dirs:      test
   build-depends:       base
-                     , orphanarium-core
+                     , disorder-core
                      , p
                      , snooze
                      , QuickCheck                      == 2.7.*
@@ -64,7 +64,7 @@ test-suite test-io
                      , http-client
                      , http-types
                      , aeson
-                     , orphanarium-core
+                     , disorder-core
                      , p
                      , scotty                          == 0.8.*
                      , QuickCheck                      == 2.7.*
