@@ -3,6 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE LambdaCase #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 module Test.Snooze.Balance.Core where
 
 import           Control.Concurrent
@@ -12,6 +13,7 @@ import           Data.List ((++))
 import           Data.Text (Text)
 import           Data.Text.Encoding as T
 
+import           Disorder.Core
 import           Disorder.Core.IO
 
 import           Network.HTTP.Client
@@ -100,6 +102,32 @@ instance Arbitrary BalanceTableResult where
       OkBalanceTable <$> arbitrary
     , ErrBalanceTable <$> arbitrary
     ]
+
+prop_randomRoundRobin_empty (Positive n) = testIO $ do
+  b <- randomRoundRobin' (limitRetries n) (\_ -> pure . Right) []
+  pure $ b === (Nothing :: Maybe (), [] :: [()])
+
+prop_randomRoundRobin_right (Positive n) h t = testIO $ do
+  let a = h : t
+  (b, e) <- randomRoundRobin' (limitRetries n) (\_ -> pure . Right) a
+  pure $ conjoin [
+      e === ([] :: [()])
+    , maybe False (flip elem a) b === True
+    ]
+
+prop_randomRoundRobin_left (Positive n) h t = testIO $ do
+  let a = h : t
+  (b, e) <- randomRoundRobin' (limitRetries n) (\_ -> pure . Left) a
+  pure $ conjoin [
+      length e === n
+    , all (flip elem a) e === True
+    , b === (Nothing :: Maybe ())
+    ]
+
+prop_randomRoundRobin (OrdPair (Positive n1) (Positive n2)) = testIO $ do
+  b <- randomRoundRobin (limitRetries $ n2 + 1) (\_ i -> pure $ if i == n1 then Right i else Left i) [0..n2]
+  pure $ b === Just n1
+
 
 return []
 tests :: IO Bool
