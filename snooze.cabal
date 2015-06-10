@@ -13,6 +13,7 @@ description:           snooze.
 library
   build-depends:
                        aeson                           == 0.8.*
+                     , attoparsec                      == 0.13.*
                      , base                            >= 3          && < 5
                      , blaze-builder                   >= 0.3        && <= 0.5
                      , bytestring                      == 0.10.*
@@ -33,10 +34,15 @@ library
                        Paths_snooze
                        Snooze
 
+                       Snooze.Balance
                        Snooze.Core
                        Snooze.Json
                        Snooze.Text
                        Snooze.Url
+
+                       Snooze.Balance.Core
+                       Snooze.Balance.Data
+                       Snooze.Balance.Serial
 
 
 test-suite test
@@ -45,7 +51,10 @@ test-suite test
   ghc-options:         -Wall -threaded -O2
   hs-source-dirs:      test
   build-depends:       base
+                     , disorder-aeson
                      , disorder-core
+                     , disorder-corpus
+                     , http-client
                      , p
                      , snooze
                      , QuickCheck                      == 2.7.*
@@ -65,6 +74,7 @@ test-suite test-io
                      , http-types
                      , aeson
                      , disorder-core
+                     , disorder-corpus
                      , p
                      , scotty                          == 0.8.*
                      , QuickCheck                      == 2.7.*
