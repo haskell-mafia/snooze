@@ -6,6 +6,7 @@ build-type:            Simple
 library
   build-depends:
                        base
+                     , disorder-corpus
                      , exceptions
                      , p
                      , QuickCheck
