@@ -1,18 +1,36 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DataKinds #-}
 module Snooze.Balance.Data (
     BalanceTable (..)
+  , UpdatableBalanceTable
   , BalanceEntry (..)
   , Host (..)
   , Port (..)
   , Weight (..)
   , balanceTableList
+  , updatableBalanceTable
+  , getTable
   ) where
+
+import           Control.Concurrent
+import           Control.Monad.IO.Class
 
 import           Data.Text
 
 import           P
 
+newtype UpdatableBalanceTable = UpdatableBalanceTable {
+    updatableBT :: MVar BalanceTable
+  }
+
+updatableBalanceTable :: MVar BalanceTable -> UpdatableBalanceTable
+updatableBalanceTable m =
+  UpdatableBalanceTable m
+
+getTable :: MonadIO m => UpdatableBalanceTable -> m BalanceTable
+getTable ubt =
+  liftIO . readMVar $ updatableBT ubt
 
 data BalanceTable =
   BalanceTable {
