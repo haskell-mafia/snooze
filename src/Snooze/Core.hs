@@ -43,7 +43,8 @@ delete url' headers =
 -- Eventually we will want/need to have sensible retries/timeouts here
 httpGo :: Request -> IO (Response BSL.ByteString)
 httpGo req =
-  withManager defaultManagerSettings $ httpLbs req { checkStatus = checkStatusIgnore }
+  newManager defaultManagerSettings >>=
+    httpLbs req { checkStatus = checkStatusIgnore }
     where
       -- A stupid default of http-client is to throw exceptions for non-200
       checkStatusIgnore _ _ _ = Nothing
