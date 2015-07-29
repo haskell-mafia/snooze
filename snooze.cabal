@@ -59,9 +59,11 @@ test-suite test
                      , http-client
                      , p
                      , snooze
+                     , twine
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , text
+                     , either                          >= 4.3        && < 4.5
 
 test-suite test-io
   type:                exitcode-stdio-1.0

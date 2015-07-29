@@ -20,8 +20,16 @@ instance Arbitrary BalanceTable where
 
 instance Arbitrary BalanceEntry where
   arbitrary = BalanceEntry
+    <$> arbitrary
+    <*> arbitrary
+
+instance Arbitrary Host where
+  arbitrary = Host
     <$> elements muppets
-    <*> fmap getPositive arbitrary
+
+instance Arbitrary Port where
+  arbitrary = Port
+    <$> fmap getPositive arbitrary
 
 instance Arbitrary Path where
   arbitrary = path <$> arbitrary
