@@ -7,11 +7,11 @@ import           Data.Text.Encoding as TL
 
 import           Network.HTTP.Client
 
-import           Snooze.Balance.Data
+import           Snooze.Balance.Data hiding (host, port)
 
 
 balanceRequest :: BalanceEntry -> Request -> Request
-balanceRequest (BalanceEntry h p) r = r {
+balanceRequest (BalanceEntry (Host h) (Port p)) r = r {
     host = TL.encodeUtf8 h
   , port = p
   }

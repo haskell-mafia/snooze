@@ -21,7 +21,7 @@ balanceTableToText (BalanceTable h t) =
   T.unlines $ fmap balanceEntryToText (h : t)
 
 balanceEntryToText :: BalanceEntry -> Text
-balanceEntryToText (BalanceEntry h p) =
+balanceEntryToText (BalanceEntry (Host h) (Port p)) =
   T.intercalate " " [h, T.pack $ show p]
 
 balanceTableFromText :: Text -> Either String BalanceTable
@@ -39,4 +39,4 @@ balanceEntryParser :: Parser BalanceEntry
 balanceEntryParser = do
   h <- T.pack <$> manyTill anyChar (char ' ')
   p <- many' digit >>= fromMaybeM (fail "Invalid port") . readMaybe
-  pure $ BalanceEntry h p
+  pure $ BalanceEntry (Host h) (Port p)

@@ -3,6 +3,9 @@
 module Snooze.Balance.Data (
     BalanceTable (..)
   , BalanceEntry (..)
+  , Host (..)
+  , Port (..)
+  , Weight (..)
   , balanceTableList
   ) where
 
@@ -19,10 +22,22 @@ data BalanceTable =
 
 data BalanceEntry =
   BalanceEntry {
-    balanceHost :: Text
-  , balancePort :: Int
+    balanceHost :: Host
+  , balancePort :: Port
   } deriving (Eq, Show)
 
 balanceTableList :: BalanceTable -> [BalanceEntry]
 balanceTableList (BalanceTable h t) =
   h : t
+
+newtype Host = Host {
+    host :: Text
+  } deriving (Eq, Show, Ord)
+
+newtype Weight = Weight {
+    weight :: Int
+  } deriving (Eq, Show, Ord)
+
+newtype Port = Port {
+    port :: Int
+  } deriving (Eq, Show, Ord)
