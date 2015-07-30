@@ -18,7 +18,6 @@ import           System.IO
 import           Web.Scotty as S
 
 import           Test.Snooze.Arbitrary ()
-import           Test.Snooze.Core
 import           Test.Snooze.Server
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()

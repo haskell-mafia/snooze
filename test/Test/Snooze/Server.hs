@@ -28,6 +28,11 @@ withServer app f = do
     (forkIO . scotty port $ app)
     killThread
     (const $ f url')
+  
+withServer' :: Path -> ScottyM () -> (Url -> IO a) -> IO a
+withServer' p s a =
+  withServer s $ \b -> maybe (fail $ "Bad URL" <> T.unpack b) pure (url b p) >>= a
+
 
 -- Unfortunately the "Web.Scotty.Route" 'literal' match doesn't always match
 pathRoutePattern :: Path -> RoutePattern
