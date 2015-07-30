@@ -79,11 +79,13 @@ test-suite test-io
                      , aeson
                      , disorder-core
                      , disorder-corpus
+                     , network
                      , p
                      , scotty                          >= 0.8        && < 0.10
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , random
+                     , retry
                      , snooze
                      , text
                      , wai
