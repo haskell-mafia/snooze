@@ -5,7 +5,6 @@
 module Test.Snooze.Core where
 
 import           Data.ByteString.Lazy as BSL
-import           Data.Text as T
 
 import           Network.HTTP.Client
 import           Network.HTTP.Types.Status
@@ -74,10 +73,6 @@ prop_delete_status p = monadicIO $ do
 
   stop $ responseStatus x === status400
 
-
-withServer' :: Path -> ScottyM () -> (Url -> IO a) -> IO a
-withServer' p s a =
-  withServer s $ \b -> maybe (fail $ "Bad URL" <> T.unpack b) pure (url b p) >>= a
 
 return []
 tests :: IO Bool
