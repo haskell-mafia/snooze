@@ -17,6 +17,8 @@ library
                      , text
                      , wai
                      , twine                      == 0.0.1
+                     , retry                      == 0.6.*
+                     , network                    == 2.6.*
 
   exposed-modules:
                        Test.Snooze.Arbitrary
