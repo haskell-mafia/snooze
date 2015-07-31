@@ -16,6 +16,7 @@ library
                      , snooze
                      , text
                      , wai
+                     , twine                      == 0.0.1
 
   exposed-modules:
                        Test.Snooze.Arbitrary
