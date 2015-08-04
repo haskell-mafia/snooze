@@ -1,14 +1,22 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Snooze.Balance.Core (
-    balanceRequest
+    module Control.Retry
+  , balanceRequest
   , balance
   , tick
+  , randomRoundRobin'
+  , randomRoundRobin
+  , retrying'
   ) where
 
 import           Control.Concurrent
-import           Control.Monad.Trans.Either
 import           Control.Monad.IO.Class
+import           Control.Monad.Random
+import           Control.Monad.State
+import           Control.Monad.Trans.Either
+import           Control.Retry
 
 import           Data.Text.Encoding as TL
 
@@ -19,8 +27,10 @@ import           P
 import           Snooze.Balance.Data hiding (host, port)
 
 import           System.IO
+import           System.Random.Shuffle
 
 import           Twine.Snooze
+
 
 balanceRequest :: BalanceEntry -> Request -> Request
 balanceRequest (BalanceEntry (Host h) (Port p)) r = r {
@@ -56,3 +66,37 @@ tick m d eh f = do
     Right bt -> do
       void $ swapMVar d 0
       void $ swapMVar m bt
+
+randomRoundRobin' :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
+  RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b, [e])
+randomRoundRobin' _ _ [] =
+  return (Nothing, [])
+randomRoundRobin' policy f l = do
+  l' <- shuffleM l
+  fmap (\(b, e) -> (b, drop 1 e)) . flip evalStateT l' . retrying' policy $ \e -> do
+    let go = get >>= \case
+          [] -> do
+            lift (shuffleM l) >>= put
+            -- Loop internally - we know the list can't be empty
+            go
+          h : t -> do
+            put t
+            lift $ f e h
+    go
+
+-- | Ignore the errors from "randomRoundRobin'"
+randomRoundRobin :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
+  RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b)
+randomRoundRobin policy f =
+  fmap fst . randomRoundRobin' policy f
+
+-- FIX Should be lifted in to x-retry (or thereabouts)
+retrying' :: MonadIO m => RetryPolicy -> ([e] -> m (Either e b)) -> m (Maybe b, [e])
+retrying' policy f =
+  flip execStateT (Nothing, []) . retrying policy (\_ -> return . isLeft) $ do
+    (_, e) <- get
+    r <- lift $ f e
+    put $ case r of
+      Left l -> (Nothing, l : e)
+      Right b -> (Just b, e)
+    return r
