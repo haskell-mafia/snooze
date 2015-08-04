@@ -9,16 +9,18 @@ module Snooze.Url (
   , urlOrFail
   , path
   , pathRaw
+  , encodePathSegmentsBS
   ) where
 
 import           Blaze.ByteString.Builder (toLazyByteString)
 
-import           Data.ByteString.Lazy.Char8 as BSL
+import           Data.ByteString
+import qualified Data.ByteString.Lazy.Char8 as BSL
 import           Data.String (String)
 import           Data.Text as T
 
 import           Network.HTTP.Client (Request, parseUrl)
-import           Network.HTTP.Types.URI (encodePathSegmentsRelative)
+import           Network.HTTP.Types.URI as URI (encodePathSegments, encodePathSegmentsRelative)
 
 import           P
 
@@ -59,3 +61,8 @@ path =
 pathRaw :: Text -> Path
 pathRaw =
   Path . T.unpack . T.dropWhile (== '/')
+
+-- | For setting 'queryString' on http-client "Request"
+encodePathSegmentsBS :: [Text] -> ByteString
+encodePathSegmentsBS =
+  BSL.toStrict . toLazyByteString . URI.encodePathSegments
