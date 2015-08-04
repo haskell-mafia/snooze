@@ -6,6 +6,7 @@ module Snooze.Url (
     Path(pathToString)
   , Url(urlToRequest)
   , url
+  , urlOrFail
   , path
   , pathRaw
   ) where
@@ -39,6 +40,11 @@ url b (Path p) =
   fmap Url . parseUrl $ T.unpack (stripTrailingSlash b) <> "/" <> p
   where
     stripTrailingSlash = T.dropWhileEnd (== '/')
+
+-- FIX This is a terrible API. I'm going to kill Url at some point _very_ soon.
+urlOrFail :: (Applicative m, Monad m) => Text -> [Text] -> m Url
+urlOrFail u p =
+  fromMaybeM (fail $ "Invalid URL: " <> T.unpack u) $ url u (path p)
 
 -- | Construct a safe 'Path' from unescaped segments.
 --
