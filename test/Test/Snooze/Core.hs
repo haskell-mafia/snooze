@@ -7,14 +7,11 @@ module Test.Snooze.Core where
 
 import           Data.ByteString.Lazy as BSL
 
-import           Disorder.Core.IO
-
 import           Network.HTTP.Client
 import           Network.HTTP.Types.Status
 
 import           P
 
-import           Snooze.Balance
 import           Snooze.Core as C
 import           Snooze.Url
 
@@ -76,20 +73,6 @@ prop_delete_status p = monadicIO $ do
       C.delete u []
 
   stop $ responseStatus x === status400
-
-prop_httpBalanced = once . testIO $ do
-  let p = Snooze.Url.path []
-  let get' = S.get (pathRoutePattern p) $ S.status status500
-  withServer' p get' $ \u1 -> do
-  withServer' p get' $ \u2 -> do
-    let bt = BalanceTable
-           (BalanceEntry (Host "localhost") (Port . port $ urlToRequest u1))
-          [ BalanceEntry (Host "localhost") (Port . port $ urlToRequest u2)
-          , BalanceEntry (Host "localhost") (Port 81)
-          , BalanceEntry (Host "localhost") (Port 444)
-          ]
-    x <- C.httpBalanced bt (limitRetries 3) (urlToRequest u1) { port = 1 }
-    pure $ fmap responseStatus x === Just status500
 
 
 return []

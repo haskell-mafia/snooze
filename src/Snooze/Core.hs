@@ -1,14 +1,12 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Snooze.Core (
     get
   , post
   , delete
   , httpGo
-  , httpBalanced
   ) where
-
-import           Control.Monad.Catch
 
 import           Data.ByteString.Lazy as BSL
 
@@ -17,7 +15,6 @@ import           Network.HTTP.Types
 
 import           P
 
-import           Snooze.Balance
 import           Snooze.Url
 
 import           System.IO
@@ -53,9 +50,3 @@ httpGo req =
     where
       -- A stupid default of http-client is to throw exceptions for non-200
       checkStatusIgnore _ _ _ = Nothing
-
-httpBalanced :: BalanceTable -> RetryPolicy -> Request -> IO (Maybe (Response BSL.ByteString))
-httpBalanced bt rp req =
-  randomRoundRobin rp
-    (\_ b -> catch (fmap Right . httpGo $ balanceRequest b req) (\(e :: HttpException) -> pure $ Left e))
-    (balanceTableList bt)

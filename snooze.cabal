@@ -47,8 +47,10 @@ library
                        Snooze.Text
                        Snooze.Url
 
+                       Snooze.Balance.Control
                        Snooze.Balance.Core
                        Snooze.Balance.Data
+                       Snooze.Balance.Http
                        Snooze.Balance.Serial
 
 
