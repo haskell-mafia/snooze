@@ -10,6 +10,7 @@ module Snooze.Balance.Data (
   , Weight (..)
   , balanceTableList
   , updatableBalanceTable
+  , balanceTableStatic
   , getTable
   ) where
 
@@ -27,6 +28,11 @@ newtype UpdatableBalanceTable = UpdatableBalanceTable {
 updatableBalanceTable :: MVar BalanceTable -> UpdatableBalanceTable
 updatableBalanceTable m =
   UpdatableBalanceTable m
+
+-- | Define a static 'BalanceTable' that never changes
+balanceTableStatic :: MonadIO m => BalanceTable -> m UpdatableBalanceTable
+balanceTableStatic =
+  liftIO . fmap updatableBalanceTable . newMVar
 
 getTable :: MonadIO m => UpdatableBalanceTable -> m BalanceTable
 getTable ubt =
