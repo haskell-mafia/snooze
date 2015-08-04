@@ -22,7 +22,7 @@ import           P hiding (snd, fst)
 
 import           Snooze.Url
 import           Snooze.Balance.Core
-import           Snooze.Balance.Data hiding (port, host)
+import           Snooze.Balance.Data
 
 import           System.IO
 

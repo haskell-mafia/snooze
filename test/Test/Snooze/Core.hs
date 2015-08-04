@@ -9,7 +9,7 @@ import           Data.ByteString.Lazy as BSL
 
 import           Disorder.Core.IO
 
-import           Network.HTTP.Client as HC
+import           Network.HTTP.Client
 import           Network.HTTP.Types.Status
 
 import           P
@@ -83,12 +83,12 @@ prop_httpBalanced = once . testIO $ do
   withServer' p get' $ \u1 -> do
   withServer' p get' $ \u2 -> do
     let bt = BalanceTable
-           (BalanceEntry (Host "localhost") (Port . HC.port $ urlToRequest u1))
-          [ BalanceEntry (Host "localhost") (Port . HC.port $ urlToRequest u2)
+           (BalanceEntry (Host "localhost") (Port . port $ urlToRequest u1))
+          [ BalanceEntry (Host "localhost") (Port . port $ urlToRequest u2)
           , BalanceEntry (Host "localhost") (Port 81)
           , BalanceEntry (Host "localhost") (Port 444)
           ]
-    x <- C.httpBalanced bt (limitRetries 3) (urlToRequest u1) { HC.port = 1 }
+    x <- C.httpBalanced bt (limitRetries 3) (urlToRequest u1) { port = 1 }
     pure $ fmap responseStatus x === Just status500
 
 

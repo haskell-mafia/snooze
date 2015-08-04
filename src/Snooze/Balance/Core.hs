@@ -24,7 +24,7 @@ import           Network.HTTP.Client
 
 import           P
 
-import           Snooze.Balance.Data hiding (host, port)
+import           Snooze.Balance.Data
 
 import           System.IO
 import           System.Random.Shuffle
