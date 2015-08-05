@@ -49,13 +49,13 @@ balanceTableList (BalanceTable h t) =
   h : t
 
 newtype Host = Host {
-    host :: Text
+    unHost :: Text
   } deriving (Eq, Show, Ord)
 
 newtype Weight = Weight {
-    weight :: Int
+    unWeight :: Int
   } deriving (Eq, Show, Ord)
 
 newtype Port = Port {
-    port :: Int
+    unPort :: Int
   } deriving (Eq, Show, Ord)
