@@ -6,18 +6,21 @@ module Snooze.Url (
     Path(pathToString)
   , Url(urlToRequest)
   , url
+  , urlOrFail
   , path
   , pathRaw
+  , encodePathSegmentsBS
   ) where
 
 import           Blaze.ByteString.Builder (toLazyByteString)
 
-import           Data.ByteString.Lazy.Char8 as BSL
+import           Data.ByteString
+import qualified Data.ByteString.Lazy.Char8 as BSL
 import           Data.String (String)
 import           Data.Text as T
 
 import           Network.HTTP.Client (Request, parseUrl)
-import           Network.HTTP.Types.URI (encodePathSegmentsRelative)
+import           Network.HTTP.Types.URI as URI (encodePathSegments, encodePathSegmentsRelative)
 
 import           P
 
@@ -40,6 +43,11 @@ url b (Path p) =
   where
     stripTrailingSlash = T.dropWhileEnd (== '/')
 
+-- FIX This is a terrible API. I'm going to kill Url at some point _very_ soon.
+urlOrFail :: (Applicative m, Monad m) => Text -> [Text] -> m Url
+urlOrFail u p =
+  fromMaybeM (fail $ "Invalid URL: " <> T.unpack u) $ url u (path p)
+
 -- | Construct a safe 'Path' from unescaped segments.
 --
 -- This supports a limited "safe" set of paths, which includes strips blank segments.
@@ -53,3 +61,8 @@ path =
 pathRaw :: Text -> Path
 pathRaw =
   Path . T.unpack . T.dropWhile (== '/')
+
+-- | For setting 'queryString' on http-client "Request"
+encodePathSegmentsBS :: [Text] -> ByteString
+encodePathSegmentsBS =
+  BSL.toStrict . toLazyByteString . URI.encodePathSegments

@@ -71,9 +71,8 @@ randomRoundRobin' :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
   RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b, [e])
 randomRoundRobin' _ _ [] =
   return (Nothing, [])
-randomRoundRobin' policy f l = do
-  l' <- shuffleM l
-  fmap (\(b, e) -> (b, drop 1 e)) . flip evalStateT l' . retrying' policy $ \e -> do
+randomRoundRobin' policy f l =
+  fmap (\(b, e) -> (b, drop 1 e)) . flip evalStateT [] . retrying' policy $ \e -> do
     let go = get >>= \case
           [] -> do
             lift (shuffleM l) >>= put
