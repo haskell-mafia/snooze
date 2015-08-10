@@ -28,6 +28,7 @@ import           Test.QuickCheck.Instances ()
 prop_httpBalanced = once . testIO $ do
   let p = Snooze.Url.path []
   let get' = S.get (pathRoutePattern p) $ S.status status500
+  m <- newManager defaultManagerSettings
   withServer' p get' $ \u1 -> do
   withServer' p get' $ \u2 -> do
     let bt = BalanceTable
@@ -37,7 +38,7 @@ prop_httpBalanced = once . testIO $ do
           , BalanceEntry (Host "localhost") (Port 444)
           ]
     ubt <- balanceTableStatic bt
-    x <- runBalanceT (BalanceConfig ubt (limitRetries 3)) $ httpBalanced id
+    x <- runBalanceT (BalanceConfig ubt (limitRetries 3) m) $ httpBalanced id
     pure $ fmap responseStatus (rightToMaybe x) === Just status500
 
 

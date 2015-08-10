@@ -22,6 +22,7 @@ data BalanceConfig =
   BalanceConfig {
     remoteBalanceTable :: UpdatableBalanceTable
   , remoteRetryPolicy :: RetryPolicy
+  , balanceConfigHttpManager :: Manager
   }
 
 data BalanceError =
