@@ -6,6 +6,7 @@ module Snooze.Core (
   , post
   , delete
   , httpGo
+  , httpGo'
   ) where
 
 import           Data.ByteString.Lazy as BSL
@@ -43,10 +44,13 @@ delete url' headers =
   }
 
 -- Eventually we will want/need to have sensible retries/timeouts here
-httpGo :: Request -> IO (Response BSL.ByteString)
-httpGo req =
-  newManager defaultManagerSettings >>=
+httpGo' :: ManagerSettings -> Request -> IO (Response BSL.ByteString)
+httpGo' ms req =
+  newManager ms >>=
     httpLbs req { checkStatus = checkStatusIgnore }
     where
       -- A stupid default of http-client is to throw exceptions for non-200
       checkStatusIgnore _ _ _ = Nothing
+
+httpGo :: Request -> IO (Response BSL.ByteString)
+httpGo = httpGo' defaultManagerSettings
