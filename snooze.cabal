@@ -95,4 +95,5 @@ test-suite test-io
                      , retry
                      , snooze
                      , text
+                     , unix                            == 2.7.*
                      , wai
