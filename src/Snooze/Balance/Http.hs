@@ -29,5 +29,5 @@ httpBalanced req = ReaderT $ \(BalanceConfig ubt rp) -> EitherT $ do
   r <- urlToRequest <$> urlOrFail "http://localhost" []
   bt <- getTable ubt
   liftIO . fmap (\(m, e) -> maybeToRight (BalanceTimeout e) m) $ randomRoundRobin' rp
-    (\_ b -> catch (fmap Right . httpGo . balanceRequest b $ req r) (\(e :: HttpException) -> pure $ Left e))
+    (\_ b -> catch (fmap Right . httpGo' . balanceRequest b $ req r) (\(e :: HttpException) -> pure $ Left e))
     (balanceTableList bt)
