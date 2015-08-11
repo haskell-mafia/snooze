@@ -25,9 +25,9 @@ httpBalanced ::
     (Applicative m, MonadIO m) =>
     (Request -> Request)
   -> BalanceT m (Response BSL.ByteString)
-httpBalanced req = ReaderT $ \(BalanceConfig ubt rp) -> EitherT $ do
+httpBalanced req = ReaderT $ \(BalanceConfig ubt rp mgr) -> EitherT $ do
   r <- urlToRequest <$> urlOrFail "http://localhost" []
   bt <- getTable ubt
   liftIO . fmap (\(m, e) -> maybeToRight (BalanceTimeout e) m) $ randomRoundRobin' rp
-    (\_ b -> catch (fmap Right . httpGo' . balanceRequest b $ req r) (\(e :: HttpException) -> pure $ Left e))
+    (\_ b -> catch (fmap Right . httpGo mgr . balanceRequest b $ req r) (\(e :: HttpException) -> pure $ Left e))
     (balanceTableList bt)
