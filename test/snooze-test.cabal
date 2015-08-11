@@ -8,6 +8,7 @@ library
                        base
                      , disorder-corpus
                      , exceptions
+                     , http-client
                      , p
                      , QuickCheck
                      , quickcheck-instances

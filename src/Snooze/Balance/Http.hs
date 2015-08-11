@@ -18,7 +18,6 @@ import           Snooze.Balance.Control
 import           Snooze.Balance.Core
 import           Snooze.Balance.Data
 import           Snooze.Core
-import           Snooze.Url
 
 
 httpBalanced ::
@@ -26,8 +25,7 @@ httpBalanced ::
     (Request -> Request)
   -> BalanceT m (Response BSL.ByteString)
 httpBalanced req = ReaderT $ \(BalanceConfig ubt rp mgr) -> EitherT $ do
-  r <- urlToRequest <$> urlOrFail "http://localhost" []
   bt <- getTable ubt
   liftIO . fmap (\(m, e) -> maybeToRight (BalanceTimeout e) m) $ randomRoundRobin' rp
-    (\_ b -> catch (fmap Right . httpGo mgr . balanceRequest b $ req r) (\(e :: HttpException) -> pure $ Left e))
+    (\_ b -> catch (fmap Right . httpGo mgr . req . balanceRequest $ b) (\(e :: HttpException) -> pure $ Left e))
     (balanceTableList bt)

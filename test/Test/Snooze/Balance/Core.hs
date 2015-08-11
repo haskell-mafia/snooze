@@ -11,16 +11,12 @@ import           Control.Monad.Trans.Either
 
 import           Data.List ((++))
 import           Data.Text (Text)
-import           Data.Text.Encoding as T
 
 import           Disorder.Core
 import           Disorder.Core.IO
 
-import           Network.HTTP.Client
-
 import           P hiding (snd, fst)
 
-import           Snooze.Url
 import           Snooze.Balance.Core
 import           Snooze.Balance.Data
 
@@ -30,11 +26,6 @@ import           Test.Snooze.Arbitrary ()
 import           Test.QuickCheck
 import           Twine.Snooze
 
-
-prop_balanceRequest :: BalanceEntry -> Path -> Property
-prop_balanceRequest be p =
-  let requestToEntry r = BalanceEntry (Host (T.decodeUtf8 $ host r)) (Port (port r))
-  in Just be === fmap (requestToEntry . balanceRequest be . urlToRequest) (url "http://localhost:80" p)
 
 -- Should fail before forkIO.
 prop_balance_initial_fail :: Text -> Property

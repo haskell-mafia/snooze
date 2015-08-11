@@ -18,13 +18,12 @@ import           Control.Monad.State
 import           Control.Monad.Trans.Either
 import           Control.Retry
 
-import           Data.Text.Encoding as TL
-
 import           Network.HTTP.Client
 
 import           P
 
 import           Snooze.Balance.Data
+import           Snooze.Url
 
 import           System.IO
 import           System.Random.Shuffle
@@ -32,11 +31,9 @@ import           System.Random.Shuffle
 import           Twine.Snooze
 
 
-balanceRequest :: BalanceEntry -> Request -> Request
-balanceRequest (BalanceEntry (Host h) (Port p)) r = r {
-    host = TL.encodeUtf8 h
-  , port = p
-  }
+balanceRequest :: BalanceEntry -> Request
+balanceRequest (BalanceEntry (Host h) (Port p)) =
+  requestCreate h p
 
 balance :: (Applicative m, MonadIO m) =>
               Duration
