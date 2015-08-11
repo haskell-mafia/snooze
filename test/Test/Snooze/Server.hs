@@ -6,6 +6,7 @@ import           Control.Concurrent
 import           Control.Exception
 import           Control.Retry
 
+import           Data.Streaming.Network
 import           Data.Text as T
 
 import           Network
@@ -16,15 +17,13 @@ import           P
 import           Snooze.Url
 
 import           System.IO
-import           System.Random (randomRIO)
 
 import           Web.Scotty
 
 
 withServer :: ScottyM () -> (Text -> IO a) -> IO a
 withServer app f = do
-  -- FIX Find an open port rather than failing randomly
-  port <- randomRIO (10100, 65534)
+  port <- getUnassignedPort
   let url' = "http://localhost:" <> (T.pack $ show port) <> "/"
   -- Check that we can connect first to avoid flakey "connection refused"
   let connect' = bracket (connectTo "localhost" $ PortNumber (fromInteger $ toInteger port)) hClose pure
