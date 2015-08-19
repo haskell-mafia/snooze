@@ -11,7 +11,6 @@ import           P
 
 import           Snooze.Core as C
 import           Snooze.Json
-import           Snooze.Url
 
 import           System.IO
 
@@ -25,19 +24,15 @@ import           Test.QuickCheck.Monadic
 
 
 -- This is bullshit - you can't create a Response directly :(
-prop_decodeResponse :: [String] -> Path -> Property
-prop_decodeResponse j p = monadicIO $ do
-  r <- run . withServer' p
-    (S.get (pathRoutePattern p) $ S.json j) $ \u ->
-       C.get u []
+prop_decodeResponse :: [String] -> Property
+prop_decodeResponse j = monadicIO $ do
+  r <- run $ withServer (S.get "/" $ S.json j) C.httpGo'
 
   stop $ decodeResponse r === Right j
 
-prop_decodeResponse_fail :: [String] -> Path -> Property
-prop_decodeResponse_fail j p = monadicIO $ do
-  r <- run . withServer' p
-    (S.get (pathRoutePattern p) $ S.json j) $ \u ->
-       C.get u []
+prop_decodeResponse_fail :: [String] -> Property
+prop_decodeResponse_fail j = monadicIO $ do
+  r <- run $ withServer (S.get "/" $ S.json j) C.httpGo'
 
   stop $ isLeft ((decodeResponse r) :: Either Text String) === True
 

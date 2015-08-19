@@ -11,7 +11,6 @@ import           P
 
 import           Snooze.Core as C
 import           Snooze.Text
-import           Snooze.Url
 
 import           System.IO
 
@@ -26,11 +25,9 @@ import           Test.QuickCheck.Monadic
 
 -- This is so bullshit I will copy and paste the coment from another file:
 --   This is bullshit - you can't create a Response directly :(
-prop_textResponse :: Text -> Path -> Property
-prop_textResponse t p = monadicIO $ do
-  r <- run . withServer' p
-    (S.get (pathRoutePattern p) . S.text . TL.fromStrict $ t) $ \u ->
-       C.get u []
+prop_textResponse :: Text -> Property
+prop_textResponse t = monadicIO $ do
+  r <- run $ withServer (S.get "/" . S.text . TL.fromStrict $ t) httpGo'
 
   stop $ textBody r === t
 

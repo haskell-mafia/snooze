@@ -13,7 +13,6 @@ import           Network.HTTP.Types.Status
 import           P
 
 import           Snooze.Balance
-import           Snooze.Url
 
 import           System.IO
 
@@ -26,14 +25,13 @@ import           Test.QuickCheck.Instances ()
 
 
 prop_httpBalanced = once . testIO $ do
-  let p = Snooze.Url.path []
-  let get' = S.get (pathRoutePattern p) $ S.status status500
+  let get' = S.get "/" $ S.status status500
   m <- newManager defaultManagerSettings
-  withServer' p get' $ \u1 -> do
-  withServer' p get' $ \u2 -> do
+  withServer get' $ \u1 -> do
+  withServer get' $ \u2 -> do
     let bt = BalanceTable
-           (BalanceEntry (Host "localhost") (Port . port $ urlToRequest u1))
-          [ BalanceEntry (Host "localhost") (Port . port $ urlToRequest u2)
+           (BalanceEntry (Host "localhost") (Port . port $ u1))
+          [ BalanceEntry (Host "localhost") (Port . port $ u2)
           , BalanceEntry (Host "localhost") (Port 81)
           , BalanceEntry (Host "localhost") (Port 444)
           ]
