@@ -1,4 +1,4 @@
-name:                  snooze-test
+name:                  ambiata-snooze-test
 version:               0.0.1
 cabal-version:         >= 1.8
 build-type:            Simple
@@ -6,18 +6,18 @@ build-type:            Simple
 library
   build-depends:
                        base
-                     , disorder-corpus
+                     , ambiata-disorder-corpus
                      , exceptions
                      , http-client
-                     , p
+                     , ambiata-p
                      , QuickCheck
                      , quickcheck-instances
                      , random
                      , scotty
-                     , snooze
+                     , ambiata-snooze
                      , text
                      , wai
-                     , twine                      == 0.0.1
+                     , ambiata-twine
                      , retry                      == 0.6.*
                      , network                    == 2.6.*
 
