@@ -1,4 +1,4 @@
-name:                  snooze-test
+name:                  ambiata-snooze-test
 version:               0.0.1
 cabal-version:         >= 1.8
 build-type:            Simple
@@ -8,12 +8,12 @@ library
                        base
                      , disorder-corpus
                      , exceptions
-                     , p
+                     , ambiata-p
                      , QuickCheck
                      , quickcheck-instances
                      , random
                      , scotty
-                     , snooze
+                     , ambiata-snooze
                      , text
                      , wai
 

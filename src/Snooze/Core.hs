@@ -1,4 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# OPTIONS_GHC -fno-warn-warnings-deprecations #-}
 module Snooze.Core (
     get
   , post
