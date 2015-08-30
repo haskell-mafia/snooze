@@ -1,6 +1,6 @@
 name:                  ambiata-snooze
 version:               0.0.1
-license:               AllRightsReserved
+license-file:          LICENSE
 author:                Ambiata <info@amiata.com>
 maintainer:            Ambiata <info@ambiata.com>
 copyright:             (c) 2015 Ambiata
