@@ -37,7 +37,7 @@ prop_httpBalanced = once . testIO $ do
           ]
     ubt <- balanceTableStatic bt
     x <- runBalanceT (BalanceConfig ubt (limitRetries 3) m) $ httpBalanced id
-    pure $ fmap responseStatus (rightToMaybe x) === Just status500
+    pure $ fmap responseStatus (fmap snd $ rightToMaybe x) === Just status500
 
 
 return []
