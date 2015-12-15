@@ -29,7 +29,7 @@ withServer app f = do
   bracket
     (forkIO . scotty port $ app)
     killThread
-    (const $ (recoverAll (limitRetries 5) connect') >> f (requestCreate "localhost" port))
+    (const $ (recoverAll (limitRetries 5) (\_ -> connect')) >> f (requestCreate "localhost" port))
 
 -- Unfortunately the "Web.Scotty.Route" 'literal' match doesn't always match
 pathRoutePattern :: Path -> RoutePattern

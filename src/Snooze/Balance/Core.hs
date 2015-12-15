@@ -1,6 +1,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE RankNTypes #-}
 module Snooze.Balance.Core (
     module Control.Retry
   , balanceRequest
@@ -65,7 +66,7 @@ tick m d eh f = do
       void $ swapMVar m bt
 
 randomRoundRobin' :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
-  RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b, [e])
+   RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b, [e])
 randomRoundRobin' _ _ [] =
   return (Nothing, [])
 randomRoundRobin' policy f l =
@@ -82,14 +83,14 @@ randomRoundRobin' policy f l =
 
 -- | Ignore the errors from "randomRoundRobin'"
 randomRoundRobin :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
-  RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b)
+   RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b)
 randomRoundRobin policy f =
   fmap fst . randomRoundRobin' policy f
 
 -- FIX Should be lifted in to x-retry (or thereabouts)
-retrying' :: MonadIO m => RetryPolicy -> ([e] -> m (Either e b)) -> m (Maybe b, [e])
+retrying' :: (MonadIO m) => RetryPolicy -> ([e] -> m (Either e b)) -> m (Maybe b, [e])
 retrying' policy f =
-  flip execStateT (Nothing, []) . retrying policy (\_ -> return . isLeft) $ do
+  flip execStateT (Nothing, []) . retrying policy (\_ e -> return . isLeft $ e) $ \_ -> do
     (_, e) <- get
     r <- lift $ f e
     put $ case r of

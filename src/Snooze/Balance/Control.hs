@@ -1,4 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE RankNTypes #-}
 module Snooze.Balance.Control (
     module X
   , BalanceConfig (..)

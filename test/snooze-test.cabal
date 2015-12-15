@@ -18,7 +18,7 @@ library
                      , text
                      , wai
                      , ambiata-twine
-                     , retry                      == 0.6.*
+                     , retry                      == 0.7.*
                      , network                    == 2.6.*
 
   exposed-modules:
