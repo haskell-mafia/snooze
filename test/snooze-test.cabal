@@ -7,17 +7,17 @@ library
   build-depends:
                        base
                      , ambiata-disorder-corpus
+                     , ambiata-p
+                     , ambiata-snooze
+                     , ambiata-twine
                      , exceptions
                      , http-client
-                     , ambiata-p
                      , QuickCheck
                      , quickcheck-instances
                      , random
                      , scotty
-                     , ambiata-snooze
                      , text
                      , wai
-                     , ambiata-twine
                      , retry                      == 0.7.*
                      , network                    == 2.6.*
 

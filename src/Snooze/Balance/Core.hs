@@ -16,7 +16,6 @@ import           Control.Concurrent
 import           Control.Monad.IO.Class
 import           Control.Monad.Random
 import           Control.Monad.State
-import           Control.Monad.Trans.Either
 import           Control.Retry
 
 import           Network.HTTP.Client
@@ -31,6 +30,7 @@ import           System.Random.Shuffle
 
 import           Twine.Snooze
 
+import           X.Control.Monad.Trans.Either
 
 balanceRequest :: BalanceEntry -> Request
 balanceRequest (BalanceEntry (Host h) (Port p)) =

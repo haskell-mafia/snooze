@@ -7,7 +7,6 @@
 module Test.Snooze.Balance.Core where
 
 import           Control.Concurrent
-import           Control.Monad.Trans.Either
 
 import           Data.List ((++))
 import           Data.Text (Text)
@@ -26,6 +25,7 @@ import           Test.Snooze.Arbitrary ()
 import           Test.QuickCheck
 import           Twine.Snooze
 
+import           X.Control.Monad.Trans.Either
 
 -- Should fail before forkIO.
 prop_balance_initial_fail :: Text -> Property
