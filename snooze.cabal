@@ -13,9 +13,12 @@ description:           snooze.
 
 library
   build-depends:
-                       aeson                           == 0.8.*
+                       base                            >= 3          && < 5
+                     , aeson                           == 0.8.*
+                     , ambiata-p
+                     , ambiata-twine
+                     , ambiata-x-eithert
                      , attoparsec                      >= 0.12       && < 0.14
-                     , base                            >= 3          && < 5
                      , blaze-builder                   >= 0.3        && <= 0.5
                      , bytestring                      == 0.10.*
                      , containers                      == 0.5.*
@@ -25,14 +28,11 @@ library
                      , http-types                      == 0.8.*
                      , MonadRandom                     == 0.4.*
                      , mtl                             == 2.2.*
-                     , ambiata-p
                      , random-shuffle                  == 0.0.4.*
                      , retry                           == 0.7.*
-                     , ambiata-twine
                      , text                            >= 1.1        && < 1.3
                      , template-haskell
                      , transformers                    >= 0.3        && < 0.5
-                     , either                          >= 4.3        && < 4.5
                      -- https://github.com/yesodweb/wai/issues/439
                      , wai                             >= 3.0        && < 3.0.4.0
 
@@ -67,14 +67,14 @@ test-suite test
                      , ambiata-disorder-aeson
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
-                     , http-client
                      , ambiata-p
                      , ambiata-snooze
                      , ambiata-twine
+                     , ambiata-x-eithert
+                     , http-client
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , text
-                     , either                          >= 4.3        && < 4.5
 
 test-suite test-io
   type:                exitcode-stdio-1.0

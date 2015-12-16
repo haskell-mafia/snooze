@@ -8,7 +8,6 @@ module Snooze.Balance.Control (
   , runBalanceT
   ) where
 
-import           Control.Monad.Trans.Either as X
 import           Control.Monad.Trans.Reader as X
 import           Control.Retry
 
@@ -18,6 +17,7 @@ import           P
 
 import           Snooze.Balance.Data
 
+import           X.Control.Monad.Trans.Either as X
 
 data BalanceConfig =
   BalanceConfig {
