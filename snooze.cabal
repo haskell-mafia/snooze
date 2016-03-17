@@ -47,6 +47,8 @@ library
 
                        Snooze.Balance
                        Snooze.Core
+                       Snooze.Data
+                       Snooze.Http
                        Snooze.Json
                        Snooze.Text
                        Snooze.Url
