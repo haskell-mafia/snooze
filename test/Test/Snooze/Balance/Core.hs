@@ -9,7 +9,6 @@ module Test.Snooze.Balance.Core where
 import           Control.Concurrent
 
 import           Data.List ((++))
-import           Data.Text (Text)
 
 import           Disorder.Core
 import           Disorder.Core.IO
@@ -94,10 +93,12 @@ instance Arbitrary BalanceTableResult where
     , ErrBalanceTable <$> arbitrary
     ]
 
+prop_randomRoundRobin_empty :: Positive Int -> Property
 prop_randomRoundRobin_empty (Positive n) = testIO $ do
   b <- randomRoundRobin' (limitRetries n) (\_ -> pure . Right) []
   pure $ b === (Nothing :: Maybe (), [] :: [()])
 
+prop_randomRoundRobin_right :: Positive Int -> Int -> [Int] -> Property
 prop_randomRoundRobin_right (Positive n) h t = testIO $ do
   let a = h : t
   (b, e) <- randomRoundRobin' (limitRetries n) (\_ -> pure . Right) a
@@ -106,6 +107,7 @@ prop_randomRoundRobin_right (Positive n) h t = testIO $ do
     , maybe False (flip elem a) b === True
     ]
 
+prop_randomRoundRobin_left :: Positive Int -> Int -> [Int] -> Property
 prop_randomRoundRobin_left (Positive n) h t = testIO $ do
   let a = h : t
   (b, e) <- randomRoundRobin' (limitRetries n) (\_ -> pure . Left) a
