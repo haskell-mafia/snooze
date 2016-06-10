@@ -16,7 +16,6 @@ import           Control.Retry (RetryPolicy)
 
 import           Data.ByteString (ByteString)
 import           Data.String (IsString)
-import           Data.Text (Text)
 import           Data.Map.Strict (Map)
 
 import           P
