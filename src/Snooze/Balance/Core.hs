@@ -5,6 +5,7 @@
 module Snooze.Balance.Core (
     module Control.Retry
   , balanceRequest
+  , balanceRequest'
   , balance
   , tick
   , randomRoundRobin'
@@ -17,6 +18,8 @@ import           Control.Monad.IO.Class
 import           Control.Monad.Random
 import           Control.Monad.State
 import           Control.Retry
+
+import qualified Data.Text.Encoding as T
 
 import           Network.HTTP.Client
 
@@ -35,6 +38,13 @@ import           X.Control.Monad.Trans.Either
 balanceRequest :: BalanceEntry -> Request
 balanceRequest (BalanceEntry (Host h) (Port p)) =
   requestCreate h p
+
+balanceRequest' :: BalanceEntry -> Request -> Request
+balanceRequest' (BalanceEntry (Host h) (Port p)) r =
+  r {
+    host = T.encodeUtf8 h
+  , port = p
+  }
 
 balance :: (Applicative m, MonadIO m) =>
               Duration
