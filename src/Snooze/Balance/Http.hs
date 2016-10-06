@@ -3,6 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Snooze.Balance.Http (
     httpBalanced
+  , httpBalancedReq
   ) where
 
 import           Control.Monad.Catch
@@ -24,8 +25,22 @@ httpBalanced ::
     (Applicative m, MonadIO m) =>
     (Request -> Request)
   -> BalanceT m (Response BSL.ByteString)
-httpBalanced req = ReaderT $ \(BalanceConfig ubt rp mgr) -> EitherT $ do
+httpBalanced req =
+  httpBalancedReq' (req . balanceRequest)
+
+httpBalancedReq ::
+     (Applicative m, MonadIO m)
+  => Request
+  -> BalanceT m (Response BSL.ByteString)
+httpBalancedReq r =
+  httpBalancedReq' $ flip balanceRequest' r
+
+httpBalancedReq' ::
+     (Applicative m, MonadIO m)
+  => (BalanceEntry -> Request)
+  -> BalanceT m (Response BSL.ByteString)
+httpBalancedReq' r = ReaderT $ \(BalanceConfig ubt rp mgr) -> EitherT $ do
   bt <- getTable ubt
   liftIO . fmap (\(m, e) -> maybeToRight (BalanceTimeout e) m) $ randomRoundRobin' rp
-    (\_ b -> catch (fmap Right . httpGo mgr . req . balanceRequest $ b) (\(e :: HttpException) -> pure $ Left e))
+    (\_ b -> catch (fmap Right . httpGo mgr $ r b) (\(e :: HttpException) -> pure $ Left e))
     (balanceTableList bt)
