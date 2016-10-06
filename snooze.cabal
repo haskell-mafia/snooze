@@ -101,3 +101,5 @@ test-suite test-io
                      , ambiata-snooze
                      , text
                      , wai
+                     , data-default                    >= 0.5        && < 0.7
+
