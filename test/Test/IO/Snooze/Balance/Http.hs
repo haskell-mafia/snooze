@@ -31,13 +31,7 @@ prop_httpBalanced = once . testIO $ do
   m <- newManager defaultManagerSettings
   withServer get' $ \u1 -> do
   withServer get' $ \u2 -> do
-    let bt = BalanceTable
-           (BalanceEntry (Host "localhost") (Port . port $ u1))
-          [ BalanceEntry (Host "localhost") (Port . port $ u2)
-          , BalanceEntry (Host "localhost") (Port 81)
-          , BalanceEntry (Host "localhost") (Port 444)
-          ]
-    ubt <- balanceTableStatic bt
+    ubt <- balanceTableStatic $ serverBT u1 u2
     x <- runBalanceT (BalanceConfig ubt (limitRetries 3) m) $ httpBalanced id
     pure $ fmap responseStatus (rightToMaybe x) === Just status500
 
@@ -46,15 +40,17 @@ prop_httpBalancedReq = once . testIO $ do
   m <- newManager defaultManagerSettings
   withServer get' $ \u1 -> do
   withServer get' $ \u2 -> do
-    let bt = BalanceTable
-           (BalanceEntry (Host "localhost") (Port . port $ u1))
-          [ BalanceEntry (Host "localhost") (Port . port $ u2)
-          , BalanceEntry (Host "localhost") (Port 81)
-          , BalanceEntry (Host "localhost") (Port 444)
-          ]
-    ubt <- balanceTableStatic bt
+    ubt <- balanceTableStatic $ serverBT u1 u2
     x <- runBalanceT (BalanceConfig ubt (limitRetries 3) m) $ httpBalancedReq def
     pure $ fmap responseStatus (rightToMaybe x) === Just status500
+
+serverBT p1 p2 =
+  BalanceTable
+    (BalanceEntry (Host "localhost") (Port . port $ p1))
+    [ BalanceEntry (Host "localhost") (Port . port $ p2)
+    , BalanceEntry (Host "localhost") (Port 81)
+    , BalanceEntry (Host "localhost") (Port 444)
+    ]
 
 return []
 tests :: IO Bool
