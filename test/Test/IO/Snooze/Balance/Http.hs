@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Test.Snooze.Balance.Http where
+module Test.IO.Snooze.Balance.Http where
 
 import           Disorder.Core.IO
 
@@ -19,7 +19,7 @@ import           System.IO
 import           Web.Scotty as S
 
 import           Test.Snooze.Arbitrary ()
-import           Test.Snooze.Server
+import           Test.IO.Snooze.Server
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 

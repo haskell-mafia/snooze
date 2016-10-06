@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Test.Snooze.Text where
+module Test.IO.Snooze.Text where
 
 import           Data.Text as T
 import qualified Data.Text.Lazy as TL
@@ -17,7 +17,7 @@ import           System.IO
 import           Web.Scotty as S
 
 import           Test.Snooze.Arbitrary ()
-import           Test.Snooze.Server
+import           Test.IO.Snooze.Server
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.QuickCheck.Monadic

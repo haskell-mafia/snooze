@@ -2,17 +2,17 @@
 
 import           Disorder.Core.Main
 
-import qualified Test.Snooze.Balance.Http
-import qualified Test.Snooze.Core
-import qualified Test.Snooze.Json
-import qualified Test.Snooze.Text
+import qualified Test.IO.Snooze.Balance.Http
+import qualified Test.IO.Snooze.Core
+import qualified Test.IO.Snooze.Json
+import qualified Test.IO.Snooze.Text
 
 import           System.IO (IO)
 
 main :: IO ()
 main = disorderMain [
-      Test.Snooze.Balance.Http.tests
-    , Test.Snooze.Core.tests
-    , Test.Snooze.Json.tests
-    , Test.Snooze.Text.tests
+      Test.IO.Snooze.Balance.Http.tests
+    , Test.IO.Snooze.Core.tests
+    , Test.IO.Snooze.Json.tests
+    , Test.IO.Snooze.Text.tests
     ]

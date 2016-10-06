@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Test.Snooze.Core where
+module Test.IO.Snooze.Core where
 
 import           Data.ByteString.Lazy as BSL
 
@@ -18,7 +18,7 @@ import           System.IO
 import           Web.Scotty as S
 
 import           Test.Snooze.Arbitrary ()
-import           Test.Snooze.Server
+import           Test.IO.Snooze.Server
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.QuickCheck.Monadic
