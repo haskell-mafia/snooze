@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
-module Test.Snooze.Server where
+module Test.IO.Snooze.Server where
 
 import           Control.Concurrent
 import           Control.Exception

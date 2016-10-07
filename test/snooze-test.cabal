@@ -22,5 +22,5 @@ library
                      , network                    == 2.6.*
 
   exposed-modules:
+                       Test.IO.Snooze.Server
                        Test.Snooze.Arbitrary
-                       Test.Snooze.Server
