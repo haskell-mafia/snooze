@@ -82,22 +82,22 @@ test-suite test-io
   main-is:             test-io.hs
   ghc-options:         -Wall -threaded -O2
   hs-source-dirs:      test
-  build-depends:       aeson
-                     , base
-                     , bytestring
-                     , containers
-                     , http-client
-                     , http-types
+  build-depends:       base
+                     , QuickCheck
                      , aeson
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
-                     , network
                      , ambiata-p
-                     , scotty                          >= 0.8        && < 0.12
-                     , QuickCheck
+                     , ambiata-snooze
+                     , bytestring
+                     , containers
+                     , data-default                    >= 0.5        && < 0.7
+                     , http-client
+                     , http-types
+                     , network
                      , quickcheck-instances
                      , random
                      , retry
-                     , ambiata-snooze
+                     , scotty                          >= 0.8        && < 0.12
                      , text
                      , wai
