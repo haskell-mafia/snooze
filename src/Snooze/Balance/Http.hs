@@ -22,21 +22,21 @@ import           Snooze.Core
 
 
 httpBalanced ::
-    (Applicative m, MonadIO m) =>
+    MonadIO m =>
     (Request -> Request)
   -> BalanceT m (Response BSL.ByteString)
 httpBalanced req =
   httpBalancedReq' (req . balanceRequest)
 
 httpBalancedReq ::
-     (Applicative m, MonadIO m)
+     MonadIO m
   => Request
   -> BalanceT m (Response BSL.ByteString)
 httpBalancedReq r =
   httpBalancedReq' $ flip balanceRequest' r
 
 httpBalancedReq' ::
-     (Applicative m, MonadIO m)
+     MonadIO m
   => (BalanceEntry -> Request)
   -> BalanceT m (Response BSL.ByteString)
 httpBalancedReq' r = ReaderT $ \(BalanceConfig ubt rp mgr) -> EitherT $ do

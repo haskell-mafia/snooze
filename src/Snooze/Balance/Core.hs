@@ -53,7 +53,7 @@ balanceRequest' (BalanceEntry (Host h) (Port p)) r =
   , port = p
   }
 
-balance :: (Applicative m, MonadIO m) =>
+balance :: MonadIO m =>
               Duration
            -> (Int -> e -> IO ())
            -> IO (Either e BalanceTable)
@@ -82,7 +82,7 @@ tick m d eh f = do
       void $ swapMVar d 0
       void $ swapMVar m bt
 
-randomRoundRobin' :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
+randomRoundRobin' :: (Monad m, MonadRandom m, MonadIO m) =>
    RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b, [e])
 randomRoundRobin' _ _ [] =
   return (Nothing, [])
@@ -99,7 +99,7 @@ randomRoundRobin' policy f l =
     go
 
 -- | Ignore the errors from "randomRoundRobin'"
-randomRoundRobin :: (Functor m, Monad m, MonadRandom m, MonadIO m) =>
+randomRoundRobin :: (Monad m, MonadRandom m, MonadIO m) =>
    RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b)
 randomRoundRobin policy f =
   fmap fst . randomRoundRobin' policy f
