@@ -82,8 +82,12 @@ tick m d eh f = do
       void $ swapMVar d 0
       void $ swapMVar m bt
 
-randomRoundRobin' :: (Monad m, MonadRandom m, MonadIO m) =>
-   RetryPolicy -> ([e] -> a -> m (Either e b)) -> [a] -> m (Maybe b, [e])
+randomRoundRobin' ::
+     (Monad m, MonadRandom m, MonadIO m)
+  => RetryPolicy
+  -> ([e] -> a -> m (Either e b))
+  -> [a]
+  -> m (Maybe b, [e])
 randomRoundRobin' _ _ [] =
   return (Nothing, [])
 randomRoundRobin' policy f l =
