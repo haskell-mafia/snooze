@@ -6,12 +6,12 @@ module Snooze.Balance.Http (
   , httpBalancedReq
   ) where
 
-import           Control.Monad.Catch
-import           Control.Monad.IO.Class
+import           Control.Monad.Catch (catch)
+import           Control.Monad.IO.Class (MonadIO, liftIO)
 
-import           Data.ByteString.Lazy as BSL
+import qualified Data.ByteString.Lazy as BSL
 
-import           Network.HTTP.Client
+import           Network.HTTP.Client (Request, Response, HttpException)
 
 import           P
 
@@ -22,25 +22,41 @@ import           Snooze.Core
 
 
 httpBalanced ::
-    MonadIO m =>
-    (Request -> Request)
+     MonadIO m
+  => (Request -> Request)
   -> BalanceT m (Response BSL.ByteString)
 httpBalanced req =
-  httpBalancedReq' (req . balanceRequest)
+  ReaderT $ \c ->
+    httpBalancedReq' (req . balanceRequest) c
 
 httpBalancedReq ::
      MonadIO m
   => Request
   -> BalanceT m (Response BSL.ByteString)
 httpBalancedReq r =
-  httpBalancedReq' $ flip balanceRequest' r
+  ReaderT $ \c ->
+    httpBalancedT c r
+
+httpBalancedT ::
+     MonadIO m
+  => BalanceConfig
+  -> Request
+  -> EitherT BalanceError m (Response BSL.ByteString)
+httpBalancedT c r =
+    httpBalancedReq' (flip balanceRequest' r) c
 
 httpBalancedReq' ::
      MonadIO m
   => (BalanceEntry -> Request)
-  -> BalanceT m (Response BSL.ByteString)
-httpBalancedReq' r = ReaderT $ \(BalanceConfig ubt rp mgr) -> EitherT $ do
+  -> BalanceConfig
+  -> EitherT BalanceError m (Response BSL.ByteString)
+httpBalancedReq' r (BalanceConfig ubt rp mgr) = do
   bt <- getTable ubt
-  liftIO . fmap (\(m, e) -> maybeToRight (BalanceTimeout e) m) $ randomRoundRobin' rp
-    (\_ b -> catch (fmap Right . httpGo mgr $ r b) (\(e :: HttpException) -> pure $ Left e))
-    (balanceTableList bt)
+  let
+    action _ b =
+      fmap Right (httpGo mgr $ r b)
+        `catch`
+          \(e :: HttpException) -> pure $ Left e
+
+  newEitherT . liftIO . fmap (\(m, e) -> maybeToRight (BalanceTimeout e) m) $
+    randomRoundRobin' rp action (balanceTableList bt)
