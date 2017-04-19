@@ -41,7 +41,6 @@ library
                        src
 
   exposed-modules:
-                       Paths_ambiata_snooze
                        Snooze
 
                        Snooze.Balance

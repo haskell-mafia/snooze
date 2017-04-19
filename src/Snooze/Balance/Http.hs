@@ -4,6 +4,7 @@
 module Snooze.Balance.Http (
     httpBalanced
   , httpBalancedReq
+  , httpBalancedT
   ) where
 
 import           Control.Monad.Catch (catch)
