@@ -16,7 +16,6 @@ import           Test.QuickCheck.Instances ()
 instance Arbitrary BalanceTable where
   arbitrary = BalanceTable
     <$> arbitrary
-    <*> arbitrary
 
 instance Arbitrary BalanceEntry where
   arbitrary = BalanceEntry

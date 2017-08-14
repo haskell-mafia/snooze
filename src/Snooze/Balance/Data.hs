@@ -8,7 +8,6 @@ module Snooze.Balance.Data (
   , Host (..)
   , Port (..)
   , Weight (..)
-  , balanceTableList
   , updatableBalanceTable
   , balanceTableStatic
   , getTable
@@ -38,10 +37,9 @@ getTable :: MonadIO m => UpdatableBalanceTable -> m BalanceTable
 getTable ubt =
   liftIO . readMVar $ updatableBT ubt
 
-data BalanceTable =
+newtype BalanceTable =
   BalanceTable {
-    balanceTableHead :: BalanceEntry
-  , balanceTableTail :: [BalanceEntry]
+    balanceTableList :: [BalanceEntry]
   } deriving (Eq, Show)
 
 data BalanceEntry =
@@ -49,10 +47,6 @@ data BalanceEntry =
     balanceHost :: Host
   , balancePort :: Port
   } deriving (Eq, Show)
-
-balanceTableList :: BalanceTable -> [BalanceEntry]
-balanceTableList (BalanceTable h t) =
-  h : t
 
 newtype Host = Host {
     unHost :: Text
