@@ -9,6 +9,8 @@ module Snooze.Balance.Data (
   , Port (..)
   , Weight (..)
   , updatableBalanceTable
+  , updateBalanceTable
+  , newBalanceTable
   , balanceTableStatic
   , getTable
   ) where
@@ -28,10 +30,18 @@ updatableBalanceTable :: MVar BalanceTable -> UpdatableBalanceTable
 updatableBalanceTable m =
   UpdatableBalanceTable m
 
+updateBalanceTable :: MonadIO m => UpdatableBalanceTable -> BalanceTable -> m ()
+updateBalanceTable (UpdatableBalanceTable m) =
+  liftIO . void . swapMVar m
+
 -- | Define a static 'BalanceTable' that never changes
 balanceTableStatic :: MonadIO m => BalanceTable -> m UpdatableBalanceTable
 balanceTableStatic =
   liftIO . fmap updatableBalanceTable . newMVar
+
+newBalanceTable :: MonadIO m => m UpdatableBalanceTable
+newBalanceTable =
+  balanceTableStatic (BalanceTable [])
 
 getTable :: MonadIO m => UpdatableBalanceTable -> m BalanceTable
 getTable ubt =
