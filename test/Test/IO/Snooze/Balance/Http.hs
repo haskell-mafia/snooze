@@ -45,9 +45,9 @@ prop_httpBalancedReq = once . testIO $ do
     pure $ fmap responseStatus (rightToMaybe x) === Just status500
 
 serverBT p1 p2 =
-  BalanceTable
-    (BalanceEntry (Host "localhost") (Port . port $ p1))
-    [ BalanceEntry (Host "localhost") (Port . port $ p2)
+  BalanceTable [
+      BalanceEntry (Host "localhost") (Port . port $ p1)
+    , BalanceEntry (Host "localhost") (Port . port $ p2)
     , BalanceEntry (Host "localhost") (Port 81)
     , BalanceEntry (Host "localhost") (Port 444)
     ]

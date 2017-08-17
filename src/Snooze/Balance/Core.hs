@@ -64,14 +64,14 @@ balance d e f = do
   _ <- liftIO . forkIO $ worker m d e f
   right $ updatableBalanceTable m
 
-worker :: (MVar BalanceTable) -> Duration -> (Int -> e -> IO ()) -> IO (Either e BalanceTable) -> IO ()
+worker :: MVar a -> Duration -> (Int -> e -> IO ()) -> IO (Either e a) -> IO ()
 worker m d eh f = do
   em <- newMVar 0
   forever $ do
     snooze d
     tick m em eh f
 
-tick :: (MVar BalanceTable) -> (MVar Int) -> (Int -> e -> IO ()) -> IO (Either e BalanceTable) -> IO ()
+tick :: MVar a -> (MVar Int) -> (Int -> e -> IO ()) -> IO (Either e a) -> IO ()
 tick m d eh f = do
   r <- f
   case r of

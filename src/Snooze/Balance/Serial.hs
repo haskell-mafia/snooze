@@ -17,8 +17,8 @@ import           P
 
 
 balanceTableToText :: BalanceTable -> Text
-balanceTableToText (BalanceTable h t) =
-  T.unlines $ fmap balanceEntryToText (h : t)
+balanceTableToText =
+  T.unlines . fmap balanceEntryToText . balanceTableList
 
 balanceEntryToText :: BalanceEntry -> Text
 balanceEntryToText (BalanceEntry (Host h) (Port p)) =
@@ -29,11 +29,8 @@ balanceTableFromText =
   parseOnly balanceTableParser
 
 balanceTableParser :: Parser BalanceTable
-balanceTableParser = do
-  e <- balanceEntryParser
-  _ <- char '\n'
-  f <- balanceEntryParser `sepBy` (char '\n')
-  pure $ BalanceTable e f
+balanceTableParser =
+  BalanceTable <$> balanceEntryParser `sepBy` (char '\n')
 
 balanceEntryParser :: Parser BalanceEntry
 balanceEntryParser = do
