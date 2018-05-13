@@ -14,7 +14,7 @@ description:           snooze.
 library
   build-depends:
                        base                            >= 3          && < 5
-                     , aeson                           >= 0.8        && < 1.2
+                     , aeson                           >= 0.8        && < 1.4
                      , ambiata-p
                      , ambiata-twine
                      , ambiata-x-eithert
@@ -24,8 +24,8 @@ library
                      , containers                      == 0.5.*
                      , data-default                    >= 0.5        && < 0.7
                      , exceptions                      >= 0.6        && < 0.9
-                     , http-client                     == 0.4.*
-                     , http-types                      == 0.8.*
+                     , http-client                     >= 0.4        && < 0.6
+                     , http-types                      >= 0.8        && < 0.13
                      , MonadRandom                     >= 0.4        && < 0.6
                      , mtl                             == 2.2.*
                      , random-shuffle                  == 0.0.4.*

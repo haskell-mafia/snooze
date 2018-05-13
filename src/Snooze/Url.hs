@@ -15,12 +15,11 @@ import           Blaze.ByteString.Builder (toLazyByteString)
 
 import           Data.ByteString
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import           Data.Default
 import           Data.String (String)
 import           Data.Text as T
 import           Data.Text.Encoding as T
 
-import           Network.HTTP.Client (Request)
+import           Network.HTTP.Client (Request, defaultRequest)
 import           Network.HTTP.Client.Internal (host, port)
 import           Network.HTTP.Types.URI as URI (encodePathSegments, encodePathSegmentsRelative)
 
@@ -36,7 +35,7 @@ newtype Path = Path {
 
 
 requestCreate :: Text -> Int -> Request
-requestCreate host' port' = def {
+requestCreate host' port' = defaultRequest {
     host = T.encodeUtf8 host'
   , port = port'
   }
