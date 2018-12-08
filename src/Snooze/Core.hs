@@ -1,6 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE CPP #-}
 module Snooze.Core (
     httpGo
   , httpGo'
@@ -19,13 +20,16 @@ import           System.IO
 httpGo :: Manager -> Request -> IO (Response BSL.ByteString)
 httpGo mgr req =
   httpLbs req {
-      checkStatus = checkStatusIgnore
+#if MIN_VERSION_http_client(0,5,0)
+#else
+      checkStatus = _checkStatusIgnore,
+#endif
     -- Never follow redirects - should always be done by the consumer explicitly if appropriate
-    , redirectCount = 0
+      redirectCount = 0
     } mgr
   where
     -- A stupid default of http-client is to throw exceptions for non-200
-    checkStatusIgnore _ _ _ = Nothing
+    _checkStatusIgnore _ _ _ = Nothing
 
 httpGo' :: Request -> IO (Response BSL.ByteString)
 httpGo' req =

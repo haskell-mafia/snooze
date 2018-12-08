@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE PackageImports #-}
+{-# LANGUAGE CPP #-}
 module Snooze.Url (
     Path(pathToString)
   , requestCreate
@@ -9,18 +10,23 @@ module Snooze.Url (
   , pathRaw
   , encodePathSegmentsBS
   , encodePathBS
+  , newRequest
   ) where
 
 import           Blaze.ByteString.Builder (toLazyByteString)
 
 import           Data.ByteString
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import           Data.Default
 import           Data.String (String)
 import           Data.Text as T
 import           Data.Text.Encoding as T
 
 import           Network.HTTP.Client (Request)
+#if MIN_VERSION_http_client(0,5,0)
+import           Network.HTTP.Client (defaultRequest)
+#else
+import           Data.Default
+#endif
 import           Network.HTTP.Client.Internal (host, port)
 import           Network.HTTP.Types.URI as URI (encodePathSegments, encodePathSegmentsRelative)
 
@@ -36,10 +42,19 @@ newtype Path = Path {
 
 
 requestCreate :: Text -> Int -> Request
-requestCreate host' port' = def {
+requestCreate host' port' = newRequest {
     host = T.encodeUtf8 host'
   , port = port'
   }
+
+-- | Re-export of http-client default request so users don't have to
+-- import Data.Default, with a more informative name.
+newRequest :: Request
+#if MIN_VERSION_http_client(0,5,0)
+newRequest = defaultRequest
+#else
+newRequest = def
+#endif
 
 -- | Construct a safe 'Path' from unescaped segments.
 --
