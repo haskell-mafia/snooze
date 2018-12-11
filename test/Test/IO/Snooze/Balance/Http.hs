@@ -5,8 +5,6 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 module Test.IO.Snooze.Balance.Http where
 
-import           Data.Default (def)
-
 import           Disorder.Core.IO
 
 import           Network.HTTP.Client
@@ -41,7 +39,7 @@ prop_httpBalancedReq = once . testIO $ do
   withServer get' $ \u1 -> do
   withServer get' $ \u2 -> do
     ubt <- balanceTableStatic $ serverBT u1 u2
-    x <- runBalanceT (BalanceConfig ubt (limitRetries 3) m) $ httpBalancedReq def
+    x <- runBalanceT (BalanceConfig ubt (limitRetries 3) m) $ httpBalancedReq newRequest
     pure $ fmap responseStatus (rightToMaybe x) === Just status500
 
 serverBT p1 p2 =

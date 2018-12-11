@@ -20,7 +20,6 @@ import           Control.Monad.Random
 import           Control.Monad.State
 import           Control.Retry
 
-import           Data.Default (def)
 import qualified Data.Text.Encoding as T
 
 import           Network.HTTP.Client
@@ -37,10 +36,6 @@ import           Twine.Snooze
 
 import           X.Control.Monad.Trans.Either
 
--- | Re-export of http-client default request so users don't have to
--- import Data.Default, with a more informative name.
-newRequest :: Request
-newRequest = def
 
 balanceRequest :: BalanceEntry -> Request
 balanceRequest (BalanceEntry (Host h) (Port p)) =
